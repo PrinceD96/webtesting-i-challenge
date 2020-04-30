@@ -1,7 +1,7 @@
 const { get, repair, succeed, fail } = require("./enhancer.js");
 // test away!
 
-let item = { name: "Hulk", enhancement: 14, durability: 80 };
+let item = { name: "Hulk", enhancement: 17, durability: 20 };
 
 describe("repair()", () => {
 	it("restores durability to 100", () => {
@@ -25,27 +25,35 @@ describe("succeed()", () => {
 	});
 
 	it("durability is never changed", () => {
-		expect(succeed(item)).toEqual(expect.objectContaining({ durability: 80 }));
+		expect(succeed(item)).toEqual(
+			expect.objectContaining({ durability: item.durability })
+		);
 	});
 });
 
 describe("fail()", () => {
 	it("enhancement < 15 ? durability decreases by 5", () => {
-		expect(fail(item)).toEqual(
-			expect.objectContaining({ durability: item.durability - 5 })
-		);
+		expect(fail({ ...item, enhancement: 14, durability: 2 })).toEqual({
+			...item,
+			enhancement: 14,
+			durability: 0
+		});
 	});
 
 	it("enhancement >= 15 ? durability decreases by 10", () => {
-		expect(fail({ ...item, enhancement: 15 })).toEqual(
-			expect.objectContaining({ durability: item.durability - 10 })
-		);
+		expect(fail({ ...item, enhancement: 16, durability: 9 })).toEqual({
+			...item,
+			enhancement: 16,
+			durability: 0
+		});
 	});
 
 	it("enhancement > 16 ? enhancement decreases by 1", () => {
-		expect(fail({ ...item, enhancement: 18 })).toEqual(
-			expect.objectContaining({ enhancement: 17 })
-		);
+		expect(fail({ ...item, enhancement: 18, durability: 1 })).toEqual({
+			...item,
+			enhancement: 17,
+			durability: 0
+		});
 	});
 });
 
