@@ -55,4 +55,10 @@ describe("get()", () => {
 			expect.objectContaining({ name: item.name })
 		);
 	});
+
+	it("adds the enhancement before the name preceded by a plus sign(+)", () => {
+		expect(get(item)).toEqual(
+			expect.objectContaining({ name: `[+${item.enhancement}] ${item.name}` })
+		);
+	});
 });
